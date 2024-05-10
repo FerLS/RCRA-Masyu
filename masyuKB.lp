@@ -8,32 +8,37 @@
 num(0..(n*n)-1).
 
 
-{seg(X,Y) : num(X), num(Y)}.
+{line(X,Y) : num(X), num(Y)}.
 
-:- seg(X,Y), X=Y. %Eliminar los que son iguales
-:- seg(X,Y),X<Y, seg(Y,X). %Eliminar los que son simetricos
-:- seg(X,Y),(X / n) != (Y / n); (X \ n) != (Y \ n). %Eliminar los que no estan en la misma fila o columna
-:- seg(X,Y), |X - Y| > 1 ; |X - Y| != n. %Eliminar los que no son adyacentes
+:- line(X,Y), X=Y. %Eliminar los que son iguales
+:- line(X,Y), not line(Y,X). %Eliminar los que son simetricos
+:- line(X,Y),(X / n) != (Y / n); (X \ n) != (Y \ n). %Eliminar los que no estan en la misma fila o columna
+:- line(X,Y), |X - Y| > 1 ; |X - Y| != n. %Eliminar los que no son adyacentes
 
+
+% Supuesto esquina
+esquina(E) :- line(X, E), line(E, Y), X != Y, (X / n) != (Y / n), (X \ n) != (Y \ n).
 
 
 %Un numero tiene que tener o un segmento entrante o saliente o ninguno
-:- num(X), #count{Y : seg(X,Y)} = 1.
-:- num(X), #count{Y : seg(Y,X)} = 1.
+%:- num(X), #count{Y : line(X,Y)} = 1.
+%:- num(X), #count{Y : line(Y,X)} = 1.
+
+%:- num(X), #count{Y : line(X,Y)} = 3.
+%:- num(X), #count{Y : line(Y,X)} = 3.
+
+%:- num(X), #count{Y : line(X,Y)} = 4.
+%:- num(X), #count{Y : line(Y,X)} = 4.
 
 
-:- num(X), #count{Y : seg(X,Y)} = 3.
-:- num(X), #count{Y : seg(Y,X)} = 3.
 
-:- num(X), #count{Y : seg(X,Y)} = 4.
-:- num(X), #count{Y : seg(Y,X)} = 4.
 
+reach(X,Y) :- line(X,Y).
+reach(X,Y) :- line(X,Z), reach(Z,Y).
 
 
 
-reach(X,Y) :- seg(X,Y).
-reach(X,Y) :- seg(X,Z), reach(Z,Y).
-
+seg(X,Y) :- line(X,Y), X < Y.
 
 
 

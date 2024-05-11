@@ -40,10 +40,6 @@ path(X, Z) :- line(X, Y), path(Y, Z).
 :- num(X), num(Y),line(X,_),line(Y,_), not path(X, Y).
 
 
-
-
-
-
 corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n), (Y \ n) != (Z \ n). 
 
 :- white(X),  corner(X). %No puede haber blancos en esquinas

@@ -31,20 +31,22 @@ num(0..(n*n)-1).
 %path(X, Y) :- line(X, Y).
 %path(X, Y) :- line(X, Z), path(Z, Y).
 
-corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n); (Y \ n) != (Z \ n). 
-
+corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n), (Y \ n) != (Z \ n). 
 
 :- white(X),  corner(X). %No puede haber blancos en esquinas
 :- white(X), not line(X,_). %Tiene que pasar por las blancas
-:- white(X), corner(X + 1) ; corner(X-1) ; corner(X-n) ; corner(X +n).
+
+
+:- white(X),line(X,X+1), not corner(X+1),line(X,X-1),not corner(X-1).
+:- white(X),line(X,X+n), not corner(X+n),line(X,X-n),not corner(X-n).
 
 
 :- black(X),not line(X,_). %TIene que pasar por los negros
 :- black(X), not corner(X). %Tiene que estar en la esquina el negro
-:- black(X), corner(X + 1).
-:- black(X), corner(X - 1).
-:- black(X), corner(X + n).
-:- black(X), corner(X - n).
+:- black(X),line(X,X+1), corner(X + 1).
+:- black(X),line(X,X-1), corner(X - 1).
+:- black(X),line(X,X+n), corner(X + n).
+:- black(X),line(X,X-n), corner(X - n).
 
 
 seg(X,Y) :- line(X,Y), X < Y.

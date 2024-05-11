@@ -28,8 +28,21 @@ num(0..(n*n)-1).
 :- num(X), #count{Y : line(Y,X)} = 4.
 
 
-%path(X, Y) :- line(X, Y).
-%path(X, Y) :- line(X, Z), path(Z, Y).
+
+
+% Define a path relation
+path(X, Y) :- line(X, Y).
+
+% Define the transitivity rule
+path(X, Z) :- line(X, Y), path(Y, Z).
+
+% Ensure that from any line you can reach any other line
+:- num(X), num(Y),line(X,_),line(Y,_), not path(X, Y).
+
+
+
+
+
 
 corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n), (Y \ n) != (Z \ n). 
 
@@ -47,6 +60,8 @@ corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n), (Y \ n) != (Z \ n).
 :- black(X),line(X,X-1), corner(X - 1).
 :- black(X),line(X,X+n), corner(X + n).
 :- black(X),line(X,X-n), corner(X - n).
+
+
 
 
 seg(X,Y) :- line(X,Y), X < Y.

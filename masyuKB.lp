@@ -36,10 +36,12 @@ corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n); (Y \ n) != (Z \ n).
 
 :- white(X),  corner(X). %No puede haber blancos en esquinas
 :- white(X), not line(X,_). %Tiene que pasar por las blancas
+:- white(X), corner(X + 1) ; corner(X-1) ; corner(X-n) ; corner(X +n).
 
 
 :- black(X),not line(X,_). %TIene que pasar por los negros
 :- black(X), not corner(X). %Tiene que estar en la esquina el negro
+:- black(X), not corner(X + 1) ; not corner(X-1) ; not corner(X-n) ; not corner(X +n).
 
 seg(X,Y) :- line(X,Y), X < Y.
 

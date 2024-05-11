@@ -16,32 +16,35 @@ num(0..(n*n)-1).
 :- line(X,Y), |X - Y| > 1 ; |X - Y| != n. %Eliminar los que no son adyacentes
 
 
-% Supuesto esquina
-esquina(E) :- line(X, E), line(E, Y), X != Y, (X / n) != (Y / n), (X \ n) != (Y \ n).
-
 
 %Un numero tiene que tener o un segmento entrante o saliente o ninguno
-%:- num(X), #count{Y : line(X,Y)} = 1.
-%:- num(X), #count{Y : line(Y,X)} = 1.
+:- num(X), #count{Y : line(X,Y)} = 1.
+:- num(X), #count{Y : line(Y,X)} = 1.
 
-%:- num(X), #count{Y : line(X,Y)} = 3.
-%:- num(X), #count{Y : line(Y,X)} = 3.
+:- num(X), #count{Y : line(X,Y)} = 3.
+:- num(X), #count{Y : line(Y,X)} = 3.
 
-%:- num(X), #count{Y : line(X,Y)} = 4.
-%:- num(X), #count{Y : line(Y,X)} = 4.
-
-
+:- num(X), #count{Y : line(X,Y)} = 4.
+:- num(X), #count{Y : line(Y,X)} = 4.
 
 
-reach(X,Y) :- line(X,Y).
-reach(X,Y) :- line(X,Z), reach(Z,Y).
+%path(X, Y) :- line(X, Y).
+%path(X, Y) :- line(X, Z), path(Z, Y).
+
+corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n); (Y \ n) != (Z \ n). 
 
 
+:- white(X),  corner(X). %No puede haber blancos en esquinas
+:- white(X), not line(X,_). %Tiene que pasar por las blancas
+
+
+:- black(X),not line(X,_). %TIene que pasar por los negros
+:- black(X), not corner(X). %Tiene que estar en la esquina el negro
 
 seg(X,Y) :- line(X,Y), X < Y.
 
 
 
+
+
 #show seg/2.
-
-

@@ -13,7 +13,7 @@ adyacentes(X,Y) :- num(X),num(Y), |X - Y| = n.
 
 
 
-{line(X,Y) : num(X), num(Y),X!=Y} :- adyacentes(X,Y).
+{line(X,Y) : num(X), num(Y)} :- adyacentes(X,Y),X!=Y.
 
 :- line(X,Y), not line(Y,X). %Generar simetricos
 
@@ -21,6 +21,7 @@ adyacentes(X,Y) :- num(X),num(Y), |X - Y| = n.
 
 
 %Un numero tiene que tener o un segmento entrante o saliente o ninguno
+
 
 :- num(X), #count{Y : line(X,Y)} = 1.
 :- num(X), #count{Y : line(X,Y)} = 3.
@@ -41,12 +42,12 @@ path(X, Z) :- line(X, Y), path(Y, Z).
 
 corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n), (Y \ n) != (Z \ n). 
 
-:- white(X),  corner(X). %No puede haber blancos en esquinas
+
 :- white(X), not line(X,_). %Tiene que pasar por las blancas
+:- white(X),  corner(X). %No puede haber blancos en esquinas
 
 
-:- white(X),line(X,X+1), not corner(X+1),line(X,X-1),not corner(X-1).
-:- white(X),line(X,X+n), not corner(X+n),line(X,X-n),not corner(X-n).
+:- white(X),line(X,Y),line(X,Z),Y!=Z,not corner(Y) ; not corner(Z).
 
 
 :- black(X),not line(X,_). %TIene que pasar por los negros
@@ -54,10 +55,7 @@ corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n), (Y \ n) != (Z \ n).
 
 
 
-:- black(X),line(X,X+1), corner(X + 1).
-:- black(X),line(X,X-1), corner(X - 1).
-:- black(X),line(X,X+n), corner(X + n).
-:- black(X),line(X,X-n), corner(X - n).
+:- black(X),line(X,Y),corner(Y).
 
 
 

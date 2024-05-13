@@ -13,15 +13,14 @@ adyacentes(X,Y) :- num(X),num(Y), |X - Y| = n.
 
 
 
-{line(X,Y) : num(X), num(Y)} :- adyacentes(X,Y),X!=Y.
+{line(X,Y) : num(X), num(Y)} :- adyacentes(X,Y),X!=Y. %solo genera lineas adyacentes
 
 :- line(X,Y), not line(Y,X). %Generar simetricos
 
 
 
 
-%Un numero tiene que tener o un segmento entrante o saliente o ninguno
-
+%Un numero tiene que tener dos segmentos o ninguno
 
 :- num(X), #count{Y : line(X,Y)} = 1.
 :- num(X), #count{Y : line(X,Y)} = 3.
@@ -30,14 +29,9 @@ adyacentes(X,Y) :- num(X),num(Y), |X - Y| = n.
 
 
 
-% Define a path relation
 path(X, Y) :- line(X, Y).
-
-% Define the transitivity rule
 path(X, Z) :- line(X, Y), path(Y, Z).
-
-% Ensure that from any line you can reach any other line
-:- line(_,X),line(Y,_), not path(X, Y).
+:- line(_,X),line(Y,_), not path(X, Y). %Desde todas las lineas se tiene que poder llegar a todas las lineas
 
 
 corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n), (Y \ n) != (Z \ n). 
@@ -47,7 +41,7 @@ corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n), (Y \ n) != (Z \ n).
 :- white(X),  corner(X). %No puede haber blancos en esquinas
 
 
-:- white(X),line(X,Y),line(X,Z),Y!=Z,not corner(Y) ; not corner(Z).
+:- white(X),line(X,Y),line(X,Z),Y!=Z,not corner(Y) ; not corner(Z). %Minimo una esquina adyacente
 
 
 :- black(X),not line(X,_). %TIene que pasar por los negros
@@ -55,12 +49,12 @@ corner(X) :- line(Y,X),line(X,Z),Z!=Y, (Y / n) != (Z / n), (Y \ n) != (Z \ n).
 
 
 
-:- black(X),line(X,Y),corner(Y).
+:- black(X),line(X,Y),corner(Y).  %No puede haber esquinas adyacentes
 
 
 
 
-seg(X,Y) :- line(X,Y), X < Y.
+seg(X,Y) :- line(X,Y), X < Y. %Fijar el orden para imprimir bien
 
 
 
